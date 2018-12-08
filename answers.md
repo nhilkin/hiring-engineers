@@ -226,7 +226,7 @@ nhilkin@nyit.edu
 
 ![alt text](https://github.com/nhilkin/hiring-engineers/blob/master/dd_5days.PNG)
 
-![alt text](https://github.com/nhilkin/hiring-engineers/blob/master/dd_weekends2days.PNG)
+![alt text](https://github.com/nhilkin/hiring-engineers/blob/master/dd_weekends.PNG)
 
 ## Collecting APM Data
 The following command can be used to run the given APM solution:
