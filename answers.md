@@ -3,7 +3,7 @@
 ## Prerequisites - Setup the environment
 In order to avoid any dependency issues when setting up an environment for Datadog, it is recommended to use a fresh Ubuntu 16.04 virtual machine via Vagrant running on VirtualBox. Setting up the virtual machine with Vagrant is preferable due to its fast and easy setup. You can install Virtual box [from their website](https://www.virtualbox.org/) and [install the latest version of Vagrant](https://www.vagrantup.com/downloads.html) for your host machine. Once these are installed, a Vagrant Ubuntu box can be initialized from [Hashicorps' Vagrant Cloud box catalog](https://app.vagrantup.com/boxes/search). 
 
-Once you have chosen a Vagrant box, the first step is to initilize the Vagrant Ubuntu image in your command line with the following command (the ubuntu/xenial64 box was chosen to be initilized):
+Once you have chosen a Vagrant box from the catalog, the first step is to initilize the Vagrant Ubuntu image in your command line with the following command (the ubuntu/xenial64 box was chosen to be initilized):
 ```
 vagrant init ubuntu/xenial64
 ```
@@ -66,7 +66,7 @@ create user datadog with password '<GENERATED PASSWORD>';
 grant SELECT ON pg_stat_database to datadog;
 ```
 
-To verify the permissions are correct, run the following command:
+To verify the permissions are correct, run the following commands:
 ```
 \q
 psql -h localhost -U datadog postgres -c "select * from pg_stat_database LIMIT(1);" && \
@@ -104,7 +104,6 @@ The output of the command should contain a section similar to the following:
 ```
 Checks
 ======
-
   [...]
 
   postgres
@@ -138,7 +137,7 @@ cd /etc/datadog-agent/checks.d
 sudo nano /etc/datadog-agent/checks.d/my_metric.py
 ```
 
-The Python file can be edited to include the following script that will provide the custom metric. In the script we need to import the ```AgentCheck``` class from the checks module. Since the metric needs to return a random value between 0 and 1000, we need to import ```randint``` from the random module. The method ```self.gauge()``` is used to send a guage of a random number between 0 and 1000 for my_metric every time it is called:
+The Python check file can be edited to include the following script that will provide the custom metric. In the script we need to import the ```AgentCheck``` class from the checks module. Since the metric needs to return a random value between 0 and 1000, we need to import ```randint``` from the random module. The method ```self.gauge()``` is used to send a guage of a random number between 0 and 1000 for every time my_metric is called:
 ```
 from checks import AgentCheck
 from random import randint
@@ -169,9 +168,9 @@ Utilize the Datadog API to create a Timeboard that contains:
  * Any metric from the Integration on your Database with the anomaly function applied.
  * Your custom metric with the rollup function applied to sum up all the points for the past hour into one bucket
  
-Datadog provides an API to integrate with any other external system and control its functionality. The first step to do this is to create an API key. This can be done by navigating to the **Integrations** tab and selecting **APIs**. Here you will fine your API key.
+Datadog provides an API to integrate with any other external system and control its functionality. The first step to do this is to create an API key. This can be done by navigating to the **Integrations** tab and selecting **APIs**. Here you will find your API key.
 
-The following script will use this API key and will act as a timeboard containing the new metric ```my_metric``` scoped over the host, anomoly graph of cpu usage by the system from the host, and a custom metric with the rollup function applied to sum up all the points for the past hour into one bucket scoped over my host.
+The following script will use this API key and will act as a timeboard containing the new metric ```my_metric``` scoped over the host, the anomoly graph of cpu usage by the system from the host, and a custom metric with the rollup function applied to sum up all the points for the past hour into one bucket scoped over the host.
  ```
 from datadog import initialize, api
 
@@ -243,7 +242,7 @@ Create a new Metric Monitor that watches the average of your custom metric (my_m
 * Alerting threshold of 800
 * And also ensure that it will notify you if there is No Data for this query over the past 10m.
 
-The following Metric Monitor accomplishes the purpose listed above of watching the average of ```my_metric``` and alerts if it's above the warning threshold of 500 and alerting threshold of 800 over the past 5 minutes. To set this up, navitage to the **Monitors** tab on Datadog and select the **New Monitor** option. From there, select your monitor type, which will be **Metric**. You can then begin to set up your monitor, first you can leave the **Choose the detection method** as Threshold Alert, and under **Define the metric** enter the custom metric my_metric in the ```Select a metric``` box and enter your tags in the ```avg by``` box. 
+The following Metric Monitor accomplishes the purpose listed above of watching the average of ```my_metric``` and alerts if it's above the warning threshold of 500 and alerting threshold of 800 over the past 5 minutes. To set this up, navitage to the **Monitors** tab on Datadog and select the **New Monitor** option. From there select your monitor type, which will be **Metric**. You can then begin to set up your monitor, first you can leave the **Choose the detection method** as Threshold Alert, and under **Define the metric** enter the custom metric my_metric in the ```Select a metric``` box and enter your tags in the ```avg by``` box. 
 You can then fill in the necessary information in the **Set alert conditions** portion as shown to create the Metric Monitor:
 ![alt text](https://github.com/nhilkin/hiring-engineers/blob/master/dd_metric_monitor_config.png)
 
@@ -299,7 +298,7 @@ pip install flask
 ```
 Then create the app.py file and paste the given Flask code:
 ```
-sudo nano my_app.py
+sudo nano app.py
 ```
 Now we can run the APM python file:
 ```
